@@ -647,9 +647,9 @@ Continuous Integration
 
    Without automating this process, the continuous integration for
    the whole of the project would be a distributed mechanism also
-   known as "humans". We can, and we did, inflict this pain on our
-   contributors, but I'd argue that unnecessary pain is not really
-   fun, and does not scale.
+   known as "humans over the Internet". We can, and we did, inflict
+   this pain on our contributors, but I'd argue that unnecessary
+   pain is not really fun, and, more importantly, it does not scale.
 
    Consider, if you will, how much better is the situation since
    we had Continuous, when running jhbuild. The amount of breakage
@@ -680,8 +680,8 @@ GNOME
    You'll notice breakages because somebody will notify you on IRC, or
    file a bug, saying that your project fails to build on Continuous.
 
-   You may notice if you're on the #testable or #gnome-hackers IRC
-   channels.
+   You may notice it faster if you're on the #testable or #gnome-hackers
+   IRC channels.
 
    We're still far away from something that is up to par, though.
 
@@ -721,6 +721,7 @@ Travis_ / AppVeyor_ / GitLab_
 ----
 
 *Ad hoc* solutions
+
 are *best* solutions
 
 .. note::
@@ -758,7 +759,8 @@ Where do we go from here?
 -------------------------
 
 .. note::
-   Of course, this custom set up has a series of issues.
+   Of course, this custom set up has a series of issues that have become more
+   and more apparent over the years.
 
    The JS code base is not really what I'd call "easily accessible"; this is
    one of the reasons why it hasn't changed very much in the past 5 years.
