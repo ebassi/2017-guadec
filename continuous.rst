@@ -239,11 +239,14 @@ tests
    https://developer.mozilla.org/en-US/docs/Mozilla/Continuous_integration
 
 .. note::
-   There is a group of individuals who are constantly monitoring Continuous,
-   looking for broken builds and/or tests. These individuals are known as
-   "sheriffs". The sheriffs' role is to "keep the build green", or in other
-   words, to keep the code in our respositories in a good state, to the extent
-   that the state is reflected in the output shown on Continuous.
+   Build sheriffs, pictured here in their natural habitat.
+
+   A group of individuals (almost) constantly monitoring the continuous
+   build pipeline, looking for broken builds and/or tests. These individuals
+   are known as "build sheriffs". The sheriffs' role is to "keep the build
+   green", or in other words, to keep the code in our respositories in a
+   good state, to the extent that the state is reflected in the output shown
+   on build.gnome.org.
 
 ----
 
@@ -261,7 +264,7 @@ tests
 Sheriffs are your best friends
 
 .. note::
-   Of course we are not ogres. Checking the build is what CI is for.
+   Of course we are not ogres. Checking that things build is what CI is for.
 
    When sheriffs see a build or test has been broken, they are empowered to
    take one of several actions, including pushing a fix; reverting the commit
