@@ -382,11 +382,21 @@ Hate, for lack of a better word, is good
    strive to have something excellent and exciting for everyone else to
    see, use, and contribute towards.
 
-   As a matter of fact, though, I find hatred a powerful motivator to get
-   stuff done, when it comes to fixing broken behaviour. I enjoy the moment
-   when something goes from not working to working, and that includes
+   As a matter of fact, though, I find disappointment a powerful motivator
+   to get stuff done, when it comes to fixing broken behaviour. I enjoy the
+   moment when something goes from not working to working, and that includes
    every step of the way: from broken design, to broken architecture, to
    broken implementation, to broken testing, to broken integration.
+
+   This motivation is part of why I contribute to GNOME; there are very, very
+   few free and open source projects that actively encourage contributors to
+   own up broken components, architectures, and design. Being a GNOME
+   contributor means taking responsibility for something broken, fixing it
+   at the best of your abilities, and then contribute it back to the larger
+   community.
+
+   It's the campsite rule — "leave the project in a better state than when
+   you found it" — applied to free software.
 
 ----
 
@@ -403,7 +413,7 @@ Lots of things to do
 .. note::
    Turns out that working in free software has left me with no shortage
    of broken things I can complain about on social media and on IRC, and
-   possibly fix if I have direct access to the Git repository.
+   possibly fix if I have push access to the Git repository.
    
    For any given day, in truth, there are more broken things than working
    ones.
@@ -427,6 +437,10 @@ Let's talk about **building** GNOME
 
    On top of that, GNOME is composed by many, many, **many** components,
    often interoperating through API; ABI; introspection ABI; and IPC ABI.
+
+   In the past few months we had various cases where a CI/CD pipeline
+   helped us track down changes all across the board, both originating
+   from a module, and across various components.
 
 ----
 
@@ -502,12 +516,13 @@ Decentralisation, composition, delegation
 -----------------------------------------
 
 .. note::
-   As a community, we end up splitting off components instead of
-   centralising functionality; we prefer delegation and composition to
-   piling API inside single points of failure. We like small components
-   because we value the design philosophy that allows us to provide
-   choice to our users, and the ability to compose an OS tailored to their
-   needs.
+   As a community, we consciously end up splitting off components instead
+   of centralising functionality; we prefer delegation and composition to
+   piling API inside single points of failure.
+
+   We like small components because we value the design philosophy that
+   allows us to provide choice to our users, and the ability to compose
+   an OS tailored to their needs, via loosely connected interfaces.
 
 ----
 
@@ -526,11 +541,16 @@ Decentralisation, composition, delegation
    become unmaintained; or to avoid thinking about a specific niche job or
    area that we don't know very well.
 
+   "Choice" is a side effect, mostly unintented and definitely not welcome,
+   of this process.
+
 ----
 
 Complexity **breaks** choice
 
 .. note::
+   No: Linux is not about choice.
+
    Every complex system that worked invariably evolved from a simple system
    that worked.
 
@@ -548,15 +568,19 @@ Complexity **breaks** choice
 .. image:: images/bad-project.jpg
 
 .. note::
-   Shipping broken stuff is bad for users, because they will end up
-   with a broken tool that does not help them achieve their goal.
+   Shipping broken stuff is bad for users, because they will end up with a
+   broken tool that does not help them achieve their goal, and if they can't
+   do the things they set out doing, they will not use what we create.
 
-   Shipping broken stuff is bad for maintainers, because people will
-   file bugs, and maintainers get to fix them.
+   Shipping broken stuff is bad for maintainers, because people will file
+   bugs, and maintainers get to fix them, and the time you spend tracking down
+   and fixing bugs prevents you from writing features, which are cool and
+   rewarding for the time you put into your project.
 
-   Shipping broken stuff is bad for downstream packagers and OSVs,
-   because they will be placed in the position of not being able to
-   build the bad software you just released, and will file bugs.
+   Shipping broken stuff is bad for downstream packagers and OSVs, because
+   they will be placed in the position of not being able to integrate the bad
+   software you just released, and will file bugs — and while you can trick
+   people with "it works for me" for a while, you can't do that forever.
 
 ----
 
@@ -569,7 +593,7 @@ A maintainer has a problem, and they think
 .. image:: images/no-integration-test.jpg
 
 .. note::
-   Unless you're working on a single project, with zero dependencies,
+   Unless you're working on a single project, with very few dependencies,
    and basically no users, unit testing won't solve anybody's issues.
 
    Integration testing is much more complicated, and it usually comes
@@ -577,7 +601,10 @@ A maintainer has a problem, and they think
    project, and all its dependencies; then you need to set up an
    environment in which you can run your unit tests. Then you need to
    ensure that you build and run the tests every single time you, and
-   possibly your direct dependencies, commit a change.
+   possibly your direct dependencies, commit a change. This is usually
+   slower than running `make check`, and if I learned anything in the
+   past decade of free software contributions is that maintainers have
+   issues doing that already.
 
    Integration testing is a spectrum, of course; if you build two
    libraries inside your project, you can check the integration of the
