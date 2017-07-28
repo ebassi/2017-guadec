@@ -353,7 +353,11 @@ What did I learn?
 
 ----
 
-The real treasure was the hatred we found along the way
+The real treasure was
+
+the hatred we found
+
+along the way
 
 .. note::
    As it turns out, I hate all software developers.
