@@ -380,11 +380,14 @@ Hate, for lack of a better word, is good
 ----------------------------------------
 
 .. note::
-   This is the Gordon Gekko moment of the talk.
+   This is the Gordon Gekko_ moment of the talk.
 
-   I think that positive reinforcement is a great thing, and that we all
-   strive to have something excellent and exciting for everyone else to
-   see, use, and contribute towards.
+   Software, far from being a rational effort, is profoundly based on
+   emotion.
+
+   Positive emotions are a great thing, and that we all strive to have
+   something excellent and exciting for everyone else to see, use, and
+   contribute towards.
 
    As a matter of fact, though, I find disappointment a powerful motivator
    to get stuff done, when it comes to fixing broken behaviour. I enjoy the
@@ -402,12 +405,14 @@ Hate, for lack of a better word, is good
    It's the campsite rule — "leave the project in a better state than when
    you found it" — applied to free software.
 
+.. _Gekko: https://www.youtube.com/watch?v=VVxYOQS6ggk
+
 ----
 
 .. image:: images/motivational-palpatine.png
 
 .. note::
-   Of course, your mileage may vary.
+   Of course, I realise that this may be my thing, so your mileage may vary.
 
 ----
 
