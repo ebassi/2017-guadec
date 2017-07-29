@@ -911,3 +911,14 @@ Thank you!
  * Blog: https://www.bassi.io
  * Job: https://endlessm.com
 
+.. note::
+   Image credit: CC by-sa 4.0 except:
+
+    - endless.png: Copyright Endless Global, used under Fair Use
+    - double-rainbow.jpg: CC by-2.0, Tatiana12, https://www.flickr.com/photos/98826299@N00/29039049002/
+    - lying-cat.jpg: Copyright Brian K. Vaughan and Fiona Staples, used under Fair Use
+    - no-integration-test.jpg: Unknown, used under Fair Use
+    - ogre.png: Copyright Apple, used under Fair Use
+    - scum-and-villainy.jpg: Copyright George Lucas, used under Fair Use
+    - troy.jpg: Copyright Matt Groening, used under Fair Use
+
