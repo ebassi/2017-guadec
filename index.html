@@ -1,0 +1,256 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Continuous: Past, present, future</title><meta charset="UTF-8"></meta><meta name="generator" content="Hovercraft! 1.0 http://regebro.github.com/hovercraft"></meta><link rel="stylesheet" href="css/hovercraft.css" media="all"></link><link rel="stylesheet" href="css/impressConsole.css" media="all"></link><link rel="stylesheet" href="css/highlight.css" media="all"></link><link rel="stylesheet" href="2017-guadec.css" media="screen,projection"></link><link rel="stylesheet" href="2017-guadec-print.css" media="print"></link><script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        showProcessingMessages: false,
+        messageStyle: "none",
+        TeX : { extensions : ['color.js'] }
+      });
+    </script></head><body class="impress-not-supported"><div id="impress" data-transition-duration="750"><div class="step step-level-1" step="0" id="title-slide" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="0" data-y="0" data-z="0"><h1 id="continuous-past-present-future">Continuous: past, present, future</h1><h2 id="building-and-testing-gnome-one-commit-at-a-time">Building and testing GNOME, one commit at a time</h2><h3 id="guadec-2017-manchester-emmanuele-bassi-ebassi-gnome-org">GUADEC 2017 | Manchester | Emmanuele Bassi &lt;<a href="mailto:ebassi@gnome.org">ebassi@gnome.org</a>&gt;</h3></div><div class="step step-level-1" step="1" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="1600" data-y="0" data-z="0"><h1 id="welcome">Welcome!</h1><div class="notes"><p>Hello, everyone, and welcome to GUADEC!</p><p>If you are reading this, though, welcome to the notes to my GUADEC 2017
+talk.</p></div></div><div class="step step-level-1" step="2" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="3200" data-y="0" data-z="0"><img src="images/troy.png"></img><div class="notes"><p>Hi, my name is Emmanuele Bassi. You may remember me from such presentations
+as "All my Clutter state of the unions", or "An history of how GTK draws",
+or "The GTK scene graph that will be ready next year I promise".</p></div></div><div class="step step-level-1" step="3" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="4800" data-y="0" data-z="0"><h1 id="what-is-continuous">What is "Continuous"?</h1><div class="notes"><p>This time, though, I'm here to talk to you about building GNOME, and what
+is "Continuous".</p></div></div><div class="step step-level-1" step="4" data-x="4800" data-y="1000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><img src="images/colin.png"></img><div class="notes"><p>A bit of history.</p><p>"Continuous" started as a spin off from the "GNOME OS" idea, as a way to
+generate an operating system image that the GNOME design team could
+download, install, and run in order to test changes that landed in Git.</p><p>Before Continuous appeared, the design team had to deal with JHBuild,
+which was never really reliable for a day-to-day development of the whole
+of GNOME.</p><p>Colin Walters created Continuous using OSTree in order to make it easy
+to upgrade an installed OS, and avoid downloading VM images from the
+GNOME infrastructure. It also allowed to go back and forth between
+different builds, at different points in time, thus making QA easier.</p></div></div><div class="step step-level-1" step="5" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="4800" data-y="2000" data-z="0"><p>"GNOME Continuous" is a <strong>continuous integration and delivery</strong> platform that
+builds a <strong>well-defined set of components</strong> that we call "GNOME" and <strong>deploys</strong>
+the result into an OSTree repository</p><div class="notes"><p>Let's start with a definition. We are going to go through each part of
+it, so that by the end we're going to understand what "Continuous" means
+and what it does for GNOME.</p></div></div><div class="step step-level-1" step="6" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="4800" data-y="3000" data-z="0"><p>Wait, what is</p><p><strong>Continuous Integration</strong>?</p></div><div class="step step-level-1" step="7" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="4800" data-y="4000" data-z="0"><p>&#xAB;In software engineering, continuous integration (CI) is the
+practice of merging all developer working copies to a shared
+mainline several times a day.&#xBB; &#x2014; <a href="https://en.wikipedia.org/wiki/Continuous_integration">Wikipedia: Continuous integration</a></p><div class="notes"><p>Thanks to Wikipedia, we have a somewhat shared definition of what "CI"
+means.</p><p>You build everything against a known base, with known tools, and check
+that not only a commit, or a branch, or a tag go through the build step
+without issues, but also that the test suite works.</p><p>You can run CI for each module inside a complex project, like GNOME,
+assuming you have a shared base environment you don't need to constantly
+build as a base. CI is what tells you that the commit you just pushed,
+or the branch you just merged, broke your own project.</p></div></div><div class="step step-level-1" step="8" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="4800" data-y="5000" data-z="0"><p>Wait, what is</p><p><strong>Continuous Delivery</strong>?</p></div><div class="step step-level-1" step="9" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="4800" data-y="6000" data-z="0"><p>&#xAB;Continuous delivery (CD) is a software engineering approach in
+which teams produce software in short cycles, ensuring that the
+software can be reliably released at any time.&#xBB; &#x2014; <a href="https://en.wikipedia.org/wiki/Continuous_delivery">Wikipedia:
+Continuous delivery</a>.</p><div class="notes"><p>Again, thanks Wikipedia.</p><p>In more prosaic terms, it's a way to take all the resources that
+make a project, deploy them at a "staging" location, and run the tests.
+If you manage to do this quickly enough, and under enouhg automation,
+then what you call "a release" is just the promotion of a build on a
+staging location to a production one.</p><p>This has the additional benefit that it should remove the need for
+fixes done directly in production; just fix on the main line, drop into
+staging, run the tests, and promote to production.</p><p>CD is what tells you that the commit some project pushed, or the branch
+some project merged, broke everything else.</p></div></div><div class="step step-level-1" step="10" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="4800" data-y="7000" data-z="0"><p>Wait, what is a</p><p><strong>Continuous integration and delivery pipeline</strong>?</p><div class="notes"><p>Combining CI and CD into a single pipeline is what makes it possible to
+build and test complex projects, like GNOME.</p><p>We cannot build each module in GNOME as a separate, independent entity;
+each module has dependencies that GNOME itself provides.</p><p>We need CI to build every project inside GNOME.</p><p>We need CD to ensure that all of GNOME gets built in a well-known
+sequence.</p><p>Additionally, tests for each module should run inside a well defined
+environment, as they can interact and may require things like a session,
+or ancillary utilities. Your option is to create a mock environment
+separate for each one of them, and then hope the mock environment reacts
+as the real one; or to run all the tests in an environment close enough
+to the real one because it is the real one, even if it runs on a VM.</p></div></div><div class="step step-level-1" step="11" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="4800" data-y="8000" data-z="0"><h1 id="who-is-ci-cd-for">Who is CI/CD for?</h1></div><div class="step step-level-1" step="12" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="4800" data-y="9000" data-z="0"><ol><li>Maintainers / Contributors</li><li>Downstream packagers / OSVs</li><li>Application developers</li><li>QA</li></ol><div class="notes"><p>Maintainers use CI/CD to verify that their project builds in various
+configurations, and that any release or commit does not prevent the rest
+of the GNOME project from running.</p><p>Contributors use CI/CD to verify that the changes they are creating
+do not break existing uses.</p><p>Downstream packagers use CI/CD to have a known to be working baseline
+against which they can test their own patches and integration.</p><p>OS vendors use CI/CD as the baseline for a minimum viable product
+based on GNOME.</p><p>Application developers use CI/CD to have access to the platform API
+that GNOME provides, and eventually influence its direction.</p><p>Quality Assurance use CI/CD to have access to the current build and
+verify the localisation, help, and behaviour are the expected ones.</p></div></div><div class="step step-level-1" step="13" data-x="6400" data-y="1000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><img src="images/double-rainbow.jpg"></img><p>What does it all mean?</p></div><div class="step step-level-1" step="14" data-y="1000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="8000" data-z="0"><p>Continuous <strong>builds</strong> GNOME from source and <strong>tests</strong> it</p><div class="notes"><p>In so far as saying that "GNOME" is a collection of projects, each made of
+code, documentation, data, and tests; and all projects interacts with each
+other in order to create an operating system as well as a desktop
+environment; and that the OS and desktop environment provide an agreed
+upon API for application developers to run their applications...</p></div></div><div class="step step-level-1" step="15" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="9600" data-y="1000" data-z="0"><h1 id="continuous-is-gnome">Continuous is GNOME</h1><div class="notes"><p>Then Continuous <strong>is</strong> GNOME.</p></div></div><div class="step step-level-1" step="16" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="11200" data-y="1000" data-z="0"><p>Hi, my name is Emmanuele and I'll be your build sheriff for today</p></div><div class="step step-level-1" step="17" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="12800" data-y="1000" data-z="0"><img src="images/do-not-disturb.jpg"></img><p><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Continuous_integration">Build sheriff</a>: an individual, or more commonly a group of individuals,
+monitoring the state of the builder looking for broken builds and/or
+tests</p><div class="notes"><p>Build sheriffs, pictured here in their natural habitat.</p><p>A group of individuals (almost) constantly monitoring the continuous
+build pipeline, looking for broken builds and/or tests. These individuals
+are known as "build sheriffs". The sheriffs' role is to "keep the build
+green", or in other words, to keep the code in our respositories in a
+good state, to the extent that the state is reflected in the output shown
+on build.gnome.org.</p></div></div><div class="step step-level-1" step="18" id="ogre" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="14400" data-y="1000" data-z="0"><img src="images/ogre.png"></img><div class="notes"><p>Many think that build sheriffs are ogres, waiting for a build to fail to
+chastise the poor committer who didn't have any idea that the commit they
+pushed to git.gnome.org could break the build for everybody else.</p></div></div><div class="step step-level-1" step="19" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="16000" data-y="1000" data-z="0"><p>Sheriffs are your best friends</p><div class="notes"><p>Of course we are not ogres. Checking that things build is what CI is for.</p><p>When sheriffs see a build or test has been broken, they are empowered to
+take one of several actions, including pushing a fix; reverting the commit
+that caused the problem; or tagging a repository to a specific commit until
+the maintainer fixes the issue.</p><p>A build sheriff is the person that will tell you that the latest commit
+in a dependency broke a module that depends on your project; or that a
+deprecation in a base dependency is now in effect, and that you should
+either disable deprecation errors, or fix your code; or that a new version
+of the compiler enabled a new warning, and thus your code is now failing
+to build.</p><p>All of this happens on a neutral base, with complete logs and a known
+configuration, so you know where to look, how to reproduce, and possibly
+what to fix.</p></div></div><div class="step step-level-1" step="20" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="17600" data-y="1000" data-z="0"><p>From great power comes</p><p>great responsibility</p><p>&#x2014; <a href="https://en.wikipedia.org/wiki/Uncle_Ben">Ben Parker</a></p><div class="notes"><p>Build sheriffs have a very important role in any complex project. They
+do not act as gatekeepers, but they ought to be the ultimate arbiter of
+what stays into the code repository. What we do, as a free and open source
+software project, does not amount to dumping code that may or may not
+build in the lap of anybody with a network connection capable of
+cloning a series of repositories and downloading a bunch of tarballs.</p><p>We provide people with a working set of interoperating components,
+and those components must <strong>always</strong> build, and at the very least
+result in something that can be run. Pushing randomly broken things to
+the master branch is not acceptable; that's what topic branches are
+for.</p></div></div><div class="step step-level-1" step="21" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="19200" data-y="1000" data-z="0"><p>From no power comes</p><p>all the responsibility</p><p>&#x2014; Emmanuele Bassi</p><div class="notes"><p>I've been in the not really enviable position, for the past two years,
+of working as the unofficial build sheriff. All the responsibility, with
+none of the power.</p></div></div><div class="step step-level-1" step="22" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="20800" data-y="1000" data-z="0"><h1 id="what-did-i-learn">What did I learn?</h1><div class="notes"><p>Aside from badly quoting comic book characters, acting as a build sheriff
+was a way for me to learn about software development and engineering best
+practices; reliability; quality assurance; testing; integration and delivery.</p><p>Of course, the real things I learned were slightly different.</p></div></div><div class="step step-level-1" step="23" data-x="20800" data-y="2000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><ol><li><strong>Nobody</strong> builds their code</li><li>Choice is <strong>broken</strong></li><li><tt>RESOLVED WORKSFORME</tt></li></ol><div class="notes"><p>But, it mostly taught me that nobody ever compiles their own code.</p><p>Additionally, that every single maintainer who offers a build-time
+configuration choice does not test them after they get merged.</p><p>Most definitely, that the common process to write free software
+amounts to: "Does it build on my laptop with a dirty build tree?
+If it does, then ship it".</p></div></div><div class="step step-level-1" step="24" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="20800" data-y="3000" data-z="0"><p>The real treasure was</p><p>the hatred we found</p><p>along the way</p><div class="notes"><p>As it turns out, I hate all software developers.</p><p>I'm an equal opportunity hater.</p></div></div><div class="step step-level-1" step="25" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="20800" data-y="4000" data-z="0"><img src="images/scum-and-villainy.jpg"></img><p>&#xAB;You will never find a more wretched hive of scum and villainy.
+We must be cautious&#xBB;</p><div class="notes"><p>Mos Eisley, or: the stereotypical free and open source software project.</p></div></div><div class="step step-level-1" step="26" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="20800" data-y="5000" data-z="0"><h1 id="hate-for-lack-of-a-better-word-is-good">Hate, for lack of a better word, is good</h1><div class="notes"><p>This is the Gordon <a href="https://www.youtube.com/watch?v=VVxYOQS6ggk">Gekko</a> moment of the talk.</p><p>Software, far from being a rational effort, is profoundly based on
+emotion.</p><p>Positive emotions are a great thing, and that we all strive to have
+something excellent and exciting for everyone else to see, use, and
+contribute towards.</p><p>As a matter of fact, though, I find disappointment a powerful motivator
+to get stuff done, when it comes to fixing broken behaviour. I enjoy the
+moment when something goes from not working to working, and that includes
+every step of the way: from broken design, to broken architecture, to
+broken implementation, to broken testing, to broken integration.</p><p>This motivation is part of why I contribute to GNOME; there are very, very
+few free and open source projects that actively encourage contributors to
+own up broken components, architectures, and design. Being a GNOME
+contributor means taking responsibility for something broken, fixing it
+at the best of your abilities, and then contribute it back to the larger
+community.</p><p>It's the campsite rule &#x2014; "leave the project in a better state than when
+you found it" &#x2014; applied to free software.</p></div></div><div class="step step-level-1" step="27" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="20800" data-y="6000" data-z="0"><img src="images/motivational-palpatine.png"></img><div class="notes"><p>Of course, I realise that this may be my thing, so your mileage may vary.</p></div></div><div class="step step-level-1" step="28" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="20800" data-y="7000" data-z="0"><h1 id="lots-of-things-to-do">Lots of things to do</h1><div class="notes"><p>Turns out that working in free software has left me with no shortage
+of broken things I can complain about on social media and on IRC, and
+possibly fix if I have push access to the Git repository.</p><p>For any given day, in truth, there are more broken things than working
+ones.</p><p>Free software is full of poorly thought through components that barely
+work in isolation, let alone together, and it's entirely up to us to
+see them all as a cohesive unit, and fix them.</p></div></div><div class="step step-level-1" step="29" data-x="22400" data-y="1000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><p>Let's talk about <strong>building</strong> GNOME</p><div class="notes"><p>Building GNOME is not a trivial matter.</p><p>GNOME requires a core set of functionality provided by the underlying
+kernel and basic user space in order to even build, let alone run.</p><p>On top of that, GNOME is composed by many, many, <strong>many</strong> components,
+often interoperating through API; ABI; introspection ABI; and IPC ABI.</p><p>In the past few months we had various cases where a CI/CD pipeline
+helped us track down changes all across the board, both originating
+from a module, and across various components.</p></div></div><div class="step step-level-1" step="30" data-x="22400" data-y="0" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><p>Case study 1: <strong>GLib tools</strong></p><div class="notes"><p>GLib provides a few tools that deal with code generation for some of
+the boilerplate needed to write GObject. These tools are widely used
+in GNOME, and have existed since the early days of the platform, back
+when GLib was new and the world full of possibilities and wide-eyed
+idealists writing a desktop environment by first principles. This also
+means that a lot of the build infrastructure and code relying on them
+is old, and generally poorly understood. A constant of the software
+community is cargo culting our way out of a pickle, and before the
+advent of Stack Overflow, free software relied on simply having access
+to the code of various projects in order to not spend time understanding
+the tools at our disposal.</p><p>Any change made to one of the tools provided by GLib has the potential
+for a knock-down effect on any project that directly, or indirectly,
+depends on them.</p><p>Of course, we need to understand that none of the behaviours are actually
+specified, documented, or tested locally; so the only way to check
+whether a change has broken something is, quite literally, to rebuild
+the whole of GNOME and hunt down the breakage.</p><p>This cannot be achieved on a GLib maintainer's laptop, for reasons
+of time, combinatorial explosion of dependencies, and complexity of
+the build matrix. This is where a service like a continuous
+integration pipeline is fundamental in order to have a good idea of
+whether a change can be done, or whether it should wait.</p></div></div><div class="step step-level-1" step="31" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="22400" data-y="-1000" data-z="0"><p>Case study 2: <strong>Meson</strong></p><div class="notes"><p>Meson is a new build system that is getting increasing adoption in
+the GNOME community, as a replacement for Autotools.</p><p>Building applications with Meson is easy, and I thoroughly recommend
+switching to it.</p><p>Libraries, though, have an API and an ABI, and projects that depend
+on them. Changing the build system in a platform library may end up
+breaking a direct dependency because of missing symbols, or a different
+soname than expected.</p><p>Again, this is not something that can be directly caught with a test
+suite inside the project itself.</p><p>Typically, this kind of breakage is caught by Linux distributions,
+but not every library ships to Linux platforms only; and the development
+cycle of Linux distributions is not generally synchronised with upstream
+development.</p><p>We're also trying really hard to decouple GNOME from the underlying OS
+in order to let distributors and application developers not having to
+care about the environment outside of GNOME. This means taking up some
+of the responsibilities that have been, historically, the remit of
+packagers.</p></div></div><div class="step step-level-1" step="32" data-x="24000" data-y="1000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><h1 id="decentralisation-composition-delegation">Decentralisation, composition, delegation</h1><div class="notes"><p>As a community, we consciously end up splitting off components instead
+of centralising functionality; we prefer delegation and composition to
+piling API inside single points of failure.</p><p>We like small components because we value the design philosophy that
+allows us to provide choice to our users, and the ability to compose
+an OS tailored to their needs, via loosely connected interfaces.</p></div></div><div class="step step-level-1" step="33" data-x="24000" data-y="2000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><img src="images/lying-cat.jpg"></img><div class="notes"><p>This is, of course, a complete and utter fabrication.</p><p>We like smaller components because it makes it easier for each maintainer
+to keep stuff in their head without going stark raving mad; or it makes it
+easier to insulate, or route around, maintainers with strong opinions with
+which we don't really agree; or to drop dependencies when they inevitably
+become unmaintained; or to avoid thinking about a specific niche job or
+area that we don't know very well.</p><p>"Choice" is a side effect, mostly unintented and definitely not welcome,
+of this process.</p></div></div><div class="step step-level-1" step="34" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="24000" data-y="3000" data-z="0"><p>Complexity <strong>breaks</strong> choice</p><div class="notes"><p>No: Linux is not about choice.</p><p>Every complex system that worked invariably evolved from a simple system
+that worked.</p><p>A complex system designed from scratch never works and cannot be made to
+work.</p><p>Additionally, the more complex you make a system, the more unlikely you
+can make it work in all its configurations. Only a small subset of
+interactions can be built, tested, and verified as working.</p><p>If you're not testing a configuration, you must assume it's broken.</p></div></div><div class="step step-level-1" step="35" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="24000" data-y="4000" data-z="0"><img src="images/bad-project.jpg"></img><div class="notes"><p>Shipping broken stuff is bad for users, because they will end up with a
+broken tool that does not help them achieve their goal, and if they can't
+do the things they set out doing, they will not use what we create.</p><p>Shipping broken stuff is bad for maintainers, because people will file
+bugs, and maintainers get to fix them, and the time you spend tracking down
+and fixing bugs prevents you from writing features, which are cool and
+rewarding for the time you put into your project.</p><p>Shipping broken stuff is bad for downstream packagers and OSVs, because
+they will be placed in the position of not being able to integrate the bad
+software you just released, and will file bugs &#x2014; and while you can trick
+people with "it works for me" for a while, you can't do that forever.</p></div></div><div class="step step-level-1" step="36" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="24000" data-y="5000" data-z="0"><p>A maintainer has a problem, and they think</p><p><em>"I'll add some unit tests!"</em></p></div><div class="step step-level-1" step="37" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="24000" data-y="6000" data-z="0"><img src="images/no-integration-test.jpg"></img><div class="notes"><p>Unless you're working on a single project, with very few dependencies,
+and basically no users, unit testing won't solve anybody's issues.</p><p>Integration testing is much more complicated, and it usually comes
+at a fairly high cost. You need to set up a way to build your
+project, and all its dependencies; then you need to set up an
+environment in which you can run your unit tests. Then you need to
+ensure that you build and run the tests every single time you, and
+possibly your direct dependencies, commit a change. This is usually
+slower than running make check, and if I learned anything in the
+past decade of free software contributions is that maintainers have
+issues doing that already.</p><p>Integration testing is a spectrum, of course; if you build two
+libraries inside your project, you can check the integration of the
+two by simply writing a local unit test that exercises the combination
+of the API. If your project provides two separate services, you could
+write a unit that connects to both of them.</p><p>We favour small, separate components; this means that there is
+spatial and temporal distance between them. Project A can change
+between commits of project B, and vice versa. This means you need
+something that checks both project A and B.</p></div></div><div class="step step-level-1" step="38" data-x="25600" data-y="6000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><img src="images/you-broke-the-build.jpg"></img></div><div class="step step-level-1" step="39" data-x="25600" data-y="7000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><p>Stop shipping <strong>broken</strong> software</p><div class="notes"><p>Summing up.</p><p>If your project does not build unless it's your laptop&#x2026;</p><p>If your project does not build unless it's packaged for your
+Linux distribution&#x2026;</p><p>If you don't know if a change you committed will break
+something else outside your test suite&#x2026;</p><p>If you don't have a test suite running every time you
+commit something&#x2026;</p><p>Then you are shipping broken software.</p><p>Stop doing that.</p></div></div><div class="step step-level-1" step="40" data-x="27200" data-y="7000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><p><strong>Continuous Integration/Delivery</strong></p><div class="notes"><p>This is what Continuous Integration and Delivery is.</p></div></div><div class="step step-level-1" step="41" data-x="27200" data-y="8000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><p>Continuous Integration</p><p>+</p><p><strong>GNOME</strong></p><div class="notes"><p>Building GNOME is really building a lot of projects, in a well
+defined sequence, and making sure everything comes out all right
+at the othen end.</p><p>Without automating this process, the continuous integration for
+the whole of the project would be a distributed mechanism also
+known as "humans over the Internet". We can, and we did, inflict
+this pain on our contributors, but I'd argue that unnecessary
+pain is not really fun, and, more importantly, it does not scale.</p><p>Consider, if you will, how much better is the situation since
+we had Continuous, when running jhbuild. The amount of breakage
+went from a daily occurence to a random breakage introduced by
+system dependencies.</p><p>These days we not only have Continuous running the full build;
+we also have Flathub running the GNOME SDK build, mostly from
+the same sources and using a fairly similar environment.</p></div></div><div class="step step-level-1" step="42" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="27200" data-y="9000" data-z="0"><p>Continuous Integration</p><p>+</p><p>GNOME</p><p>=</p><p><strong>&#x2665;</strong></p><div class="notes"><p>This is what happens every day, seven days a week, 365 days a year.
+It's not always obvious, and you generally notice only if something
+breaks.</p><p>You'll notice breakages because somebody will notify you on IRC, or
+file a bug, saying that your project fails to build on Continuous.</p><p>You may notice it faster if you're on the #testable or #gnome-hackers
+IRC channels.</p><p>We're still far away from something that is up to par, though.</p></div></div><div class="step step-level-1" step="43" data-x="28800" data-y="9000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><p><a href="https://travis-ci.org">Travis</a> / <a href="https://ci.appveyor.com">AppVeyor</a> / <a href="https://gitlab.com">GitLab</a></p><div class="notes"><p>The current state of the art for CI pipelines in the commercial
+and free software world are:</p><blockquote><ul><li>Travis, free for open source software, takes care of Linux
+and macOS (when it's not down)</li><li>AppVeyor, free for open source, takes care of Windows</li><li>GitLab, soon to the GNOME infrastructure nearest to you</li></ul></blockquote><p>All three are generally based on a script that describes the
+build pipeline. All of them are good enough for building your
+app on a set of dependencies that are generally assumed not
+to change.</p><p>As we've seen, this is really not the case when it comes to
+building and testing GNOME.</p></div></div><div class="step step-level-1" step="44" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="30400" data-y="9000" data-z="0"><p><em>Ad hoc</em> solutions</p><p>are <em>best</em> solutions</p><div class="notes"><p>Continuous is, currently, a JS tool that consumes a JSON manifest that
+lists all the components it needs to build, in the order in which they
+must be built.</p><p>The overall idea is similar to how flatpak-builder works: you build all
+the components into a reliable, separate sandbox, with the artifacts of
+the build accessible as the base system; no network connection; and no
+additional privileges. At the end, you get a file system image.</p><p>In order to bootstrap this entire process, Continuous uses a Yocto base
+system, containing things like binutils, the compiler suite, and other
+components that are hard to build from source without a ton of patches.</p><p>The Yocto base is there not just because of political concerns &#x2014; we don't
+want to play favourites; but also because it's useful to have a neutral
+vendor as a target. It keeps us honest, and gives OS vendors a baseline
+to follow.</p><p>After each build, Continuous takes the artefacts and pushes them into
+an OSTree repository. This de-duplicates the identical files, and allows
+us to have a full history of the build. The size of the OSTree repo for
+Continuous after 5 years of daily builds is ~570 GB.</p><p>After each build, Continuous builds a VM image; boots it up; checks that
+we reach specific checkpoints in the boot process (smoketesting); and
+runs a series of tests (installed by each component) inside that VM. Then
+it spins down the VM, and puts it up for download if successful.</p></div></div><div class="step step-level-1" step="45" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="32000" data-y="9000" data-z="0"><h1 id="where-do-we-go-from-here">Where do we go from here?</h1><div class="notes"><p>Of course, this custom set up has a series of issues that have become more
+and more apparent over the years.</p><p>The JS code base is not really what I'd call "easily accessible"; this is
+one of the reasons why it hasn't changed very much in the past 5 years.</p><p>The JSON manifest is too easily broken, and at the same time not expressive
+enough. Ideally, the Flatpak builder manifest format would help us, but it
+would not be a 1:1 match with our requirements in any case.</p><p>Additionally, it has integration issues with the underlying OS; for instance
+the VM image build has stopped working in March, after an upgrade that
+involved SELinux and FUSE. Debugging this has proven fairly hard, and not
+many people understand the intricacies of this whole system.</p><p>The integration with Git is flimsy; the daemon gets often stuck, and it does
+not run on a commit hook to avoid DoS'ing the whole GNOME infrastructure.</p><p>The build bot is heavily tied to the concept of a Build API (a subset of
+Autotools) which puts it at odds with the overall effort to move to Meson,
+unless we patch every single module not using Autotools.</p></div></div><div class="step step-level-1" step="46" data-x="32000" data-y="10000" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><p>Work in <strong>progress</strong></p><div class="notes"><p>Still, there is an effort to make this whole thing work better.</p><p>Switching away from an ad hoc JS script to a series of steps in a pipeline,
+using Buildbot as a base, like Flathub does, would increase the reliability
+of the process.</p><p>Getting help from the libvirt and qemu developers to ensure that we can
+always build VMs for smoketesting and QA.</p><p>Improving the notification system to tell maintainers when a build breaks;
+automate "fails to build" bugs; add tracking branches; add nightly builds
+for stable branches as well as continuous builds for master.</p><p>Adding more people to the pool of build sheriffs, to increase coverage
+outside of the European timezones.</p><p>Ensuring that applications are placed under Continuous Integration
+separately, using the GNOME SDK nightly builds as a base.</p><p>Adding more tests for the system components, to track regressions.</p></div></div><div class="step step-level-1" step="47" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="32000" data-y="11000" data-z="0"><p>Keep <strong>building</strong></p><div class="notes"><p>More importantly, though, we need every GNOME maintainer and contributor
+to follow the mindset that it's our responsibility to keep GNOME building
+and working, and that the world does not stop at our laptop; at our Git
+repo; at our project; or even at our distribution.</p><p>Ensuring that GNOME, as a larger ecosystem, is seen as a reliable partner
+improves not just our standing in the free software world, but it makes
+our job easier.</p><p>Continuous is not just a way to enforce good engineering practices; it is
+outreach.</p></div></div><div class="step step-level-1" step="48" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="32000" data-y="12000" data-z="0"><p>Keep making GNOME <strong>awesome</strong></p><div class="notes"><p>In the end, we are all in this together, to create a strong and stable
+environment for our users.</p><p>Our goal is not to build GNOME: it is to empower our users to achieve
+what they want to achieve, with as much support from their hardware
+platform as possible; with as much security and privacy we can offer;
+with as much flexibility we can reliably support.</p></div></div><div class="step step-level-1" step="49" data-x="33600" data-y="12000" id="endless-slide" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-z="0"><img src="images/endless.png"></img><div class="notes"><p>I'd like to thank my employer, Endless, for letting me talk at GUADEC
+in front of all of you, wonderful people.</p><p>If you're reading this notes, on the other hand, thanks for checking
+out my talk, and I'm sure you're wonderful as well.</p></div></div><div class="step step-level-1" step="50" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="35200" data-y="12000" data-z="0"><h1 id="thank-you">Thank you!</h1></div><div class="step step-level-1" step="51" id="colophon" data-rotate-x="0" data-rotate-y="0" data-rotate-z="0" data-scale="1" data-x="36800" data-y="12000" data-z="0"><ul><li>License: CC by-sa 4.0</li><li>IRC: <tt>#testable</tt> on irc.gnome.org</li><li>Source: <a href="https://github.com/ebassi/2017-guadec">https://github.com/ebassi/2017-guadec</a></li><li>Slides: <a href="https://ebassi.github.io/2017-guadec">https://ebassi.github.io/2017-guadec</a></li><li>Blog: <a href="https://www.bassi.io">https://www.bassi.io</a></li><li>Job: <a href="https://endlessm.com">https://endlessm.com</a></li></ul><div class="notes"><p>Image credit: CC by-sa 4.0 except:</p><blockquote><ul><li>endless.png: Copyright Endless Global, used under Fair Use</li><li>double-rainbow.jpg: CC by-2.0, Tatiana12, <a href="https://www.flickr.com/photos/98826299@N00/29039049002/">https://www.flickr.com/photos/98826299@N00/29039049002/</a></li><li>lying-cat.jpg: Copyright Brian K. Vaughan and Fiona Staples, used under Fair Use</li><li>no-integration-test.jpg: Unknown, used under Fair Use</li><li>ogre.png: Copyright Apple, used under Fair Use</li><li>scum-and-villainy.jpg: Copyright George Lucas, used under Fair Use</li><li>troy.jpg: Copyright Matt Groening, used under Fair Use</li></ul></blockquote></div></div></div><div id="hovercraft-help"><table><tr><th>Space</th><td>Forward</td></tr><tr><th>Right, Down, Page Down</th><td>Next slide</td></tr><tr><th>Left, Up, Page Up</th><td>Previous slide</td></tr><tr><th>P</th><td>Open presenter console</td></tr><tr><th>H</th><td>Toggle this help</td></tr></table></div><script type="text/javascript" src="js/impress.js"></script><script type="text/javascript" src="js/impressConsole.js"></script><script type="text/javascript" src="js/hovercraft.js"></script></body></html>
